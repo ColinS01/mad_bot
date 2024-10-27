@@ -1,0 +1,49 @@
+[0.793s] Invoking command in '/home/colin/project/mad_bot': PYTHONPATH=/home/colin/project/build/mad_bot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/colin/project/install/mad_bot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../build/mad_bot build --build-base /home/colin/project/build/mad_bot/build install --record /home/colin/project/build/mad_bot/install.log --single-version-externally-managed install_data
+[1.140s] running egg_info
+[1.140s] creating ../build/mad_bot/mad_bot.egg-info
+[1.142s] writing ../build/mad_bot/mad_bot.egg-info/PKG-INFO
+[1.143s] writing dependency_links to ../build/mad_bot/mad_bot.egg-info/dependency_links.txt
+[1.144s] writing entry points to ../build/mad_bot/mad_bot.egg-info/entry_points.txt
+[1.144s] writing requirements to ../build/mad_bot/mad_bot.egg-info/requires.txt
+[1.144s] writing top-level names to ../build/mad_bot/mad_bot.egg-info/top_level.txt
+[1.144s] writing manifest file '../build/mad_bot/mad_bot.egg-info/SOURCES.txt'
+[1.147s] reading manifest file '../build/mad_bot/mad_bot.egg-info/SOURCES.txt'
+[1.147s] adding license file 'LICENSE'
+[1.148s] writing manifest file '../build/mad_bot/mad_bot.egg-info/SOURCES.txt'
+[1.148s] running build
+[1.148s] running build_py
+[1.148s] creating /home/colin/project/build/mad_bot/build
+[1.148s] creating /home/colin/project/build/mad_bot/build/lib
+[1.148s] creating /home/colin/project/build/mad_bot/build/lib/mad_bot
+[1.149s] copying mad_bot/__init__.py -> /home/colin/project/build/mad_bot/build/lib/mad_bot
+[1.149s] copying mad_bot/camera_controller.py -> /home/colin/project/build/mad_bot/build/lib/mad_bot
+[1.149s] copying mad_bot/movement_controller.py -> /home/colin/project/build/mad_bot/build/lib/mad_bot
+[1.149s] running install
+[1.149s] running install_lib
+[1.150s] creating /home/colin/project/install/mad_bot/lib/python3.10/site-packages/mad_bot
+[1.151s] copying /home/colin/project/build/mad_bot/build/lib/mad_bot/__init__.py -> /home/colin/project/install/mad_bot/lib/python3.10/site-packages/mad_bot
+[1.151s] copying /home/colin/project/build/mad_bot/build/lib/mad_bot/camera_controller.py -> /home/colin/project/install/mad_bot/lib/python3.10/site-packages/mad_bot
+[1.151s] copying /home/colin/project/build/mad_bot/build/lib/mad_bot/movement_controller.py -> /home/colin/project/install/mad_bot/lib/python3.10/site-packages/mad_bot
+[1.151s] byte-compiling /home/colin/project/install/mad_bot/lib/python3.10/site-packages/mad_bot/__init__.py to __init__.cpython-310.pyc
+[1.152s] byte-compiling /home/colin/project/install/mad_bot/lib/python3.10/site-packages/mad_bot/camera_controller.py to camera_controller.cpython-310.pyc
+[1.153s] byte-compiling /home/colin/project/install/mad_bot/lib/python3.10/site-packages/mad_bot/movement_controller.py to movement_controller.cpython-310.pyc
+[1.153s] running install_data
+[1.154s] creating /home/colin/project/install/mad_bot/share/mad_bot/launch
+[1.154s] copying launch/mad_bot.launch.py -> /home/colin/project/install/mad_bot/share/mad_bot/launch
+[1.154s] creating /home/colin/project/install/mad_bot/share/mad_bot/world
+[1.154s] copying world/world.sdf -> /home/colin/project/install/mad_bot/share/mad_bot/world
+[1.154s] creating /home/colin/project/install/mad_bot/share/mad_bot/model
+[1.154s] copying model/mad_bot.sdf -> /home/colin/project/install/mad_bot/share/mad_bot/model
+[1.154s] copying model/mad_bot.urdf -> /home/colin/project/install/mad_bot/share/mad_bot/model
+[1.154s] creating /home/colin/project/install/mad_bot/share/mad_bot/config
+[1.155s] copying config/mad_bot.rviz -> /home/colin/project/install/mad_bot/share/mad_bot/config
+[1.155s] copying config/ros_gz_bridge.yaml -> /home/colin/project/install/mad_bot/share/mad_bot/config
+[1.155s] creating /home/colin/project/install/mad_bot/share/mad_bot/image
+[1.155s] copying image/file.jpg -> /home/colin/project/install/mad_bot/share/mad_bot/image
+[1.156s] running install_egg_info
+[1.162s] Copying ../build/mad_bot/mad_bot.egg-info to /home/colin/project/install/mad_bot/lib/python3.10/site-packages/mad_bot-0.0.1-py3.10.egg-info
+[1.162s] running install_scripts
+[1.194s] Installing camera_controller script to /home/colin/project/install/mad_bot/lib/mad_bot
+[1.194s] Installing movement_controller script to /home/colin/project/install/mad_bot/lib/mad_bot
+[1.194s] writing list of installed files to '/home/colin/project/build/mad_bot/install.log'
+[1.247s] Invoked command in '/home/colin/project/mad_bot' returned '0': PYTHONPATH=/home/colin/project/build/mad_bot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/colin/project/install/mad_bot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../build/mad_bot build --build-base /home/colin/project/build/mad_bot/build install --record /home/colin/project/build/mad_bot/install.log --single-version-externally-managed install_data

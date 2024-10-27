@@ -1,0 +1,155 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+    <model name='mad_bot'>
+        <pose>0 2 0 0 0 0</pose>
+        <link name='chassis'>
+            <pose>0 0 0.4 0 0 0</pose>
+            <inertial>
+                <mass>18</mass>
+                <inertia>
+                    <ixx>0.24</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>1.5</iyy>
+                    <iyz>0</iyz>
+                    <izz>1.74</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                    <box>
+                        <size>1 0.4 0.4</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.5 0.5 1.0 1</ambient>
+                    <diffuse>0.5 0.5 1.0 1</diffuse>
+                    <specular>0.0 0.0 1.0 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                    <box>
+                        <size>1 0.4 0.4</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name='left_wheel'>
+            <pose relative_to="chassis">0 0.325 0 -1.5707 0 0</pose>
+            <inertial>
+                <mass>2.5</mass>
+                <inertia>
+                    <ixx>0.12</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.12</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.1</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                    <cylinder>
+                        <radius>0.35</radius>
+                        <length>0.25</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                    <ambient>0.2 0.2 0.2 1</ambient>
+                    <diffuse>0.2 0.2 0.2 1</diffuse>
+                    <specular>0.2 0.2 0.2 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                    <cylinder>
+                        <radius>0.35</radius>
+                        <length>0.25</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name='right_wheel'>
+            <pose relative_to="chassis">0 -0.325 0 -1.5707 0 0</pose>
+            <inertial>
+                <mass>2.5</mass>
+                <inertia>
+                    <ixx>0.12</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.12</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.1</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                    <cylinder>
+                        <radius>0.35</radius>
+                        <length>0.25</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                    <ambient>0.2 0.2 0.2 1</ambient>
+                    <diffuse>0.2 0.2 0.2 1</diffuse>
+                    <specular>0.2 0.2 0.2 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                    <cylinder>
+                        <radius>0.35</radius>
+                        <length>0.25</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name='left_wheel_joint' type='revolute'>
+            <parent>chassis</parent>
+            <child>left_wheel</child>
+            <axis>
+                <xyz>0 0 1</xyz>
+                <limit>
+                    <lower>-1000</lower>
+                    <upper>1000</upper>
+                    <effort>10</effort>
+                </limit>
+            </axis>
+        </joint>
+
+        <joint name='right_wheel_joint' type='revolute'>
+            <parent>chassis</parent>
+            <child>right_wheel</child>
+            <axis>
+                <xyz>0 0 1</xyz>
+                <limit>
+                    <lower>-1000</lower>
+                    <upper>1000</upper>
+                    <effort>10</effort>
+                </limit>
+            </axis>
+        </joint>t
+
+        <plugin
+            filename="ignition-gazebo-diff-drive-system"
+            name="gz::sim::systems::DiffDrive">
+            <left_joint>left_wheel_joint</left_joint>
+            <right_joint>right_wheel_joint</right_joint>
+            <wheel_separation>1.5</wheel_separation>
+            <wheel_radius>0.35</wheel_radius>
+            <odom_publish_frequency>5</odom_publish_frequency>
+            <max_linear_acceleration>2.0</max_linear_acceleration>
+            <min_linear_acceleration>-2.0</min_linear_acceleration>
+            <max_angular_acceleration>3.0</max_angular_acceleration>
+            <min_angular_acceleration>-3.0</min_angular_acceleration>
+            <max_linear_velocity>1.0</max_linear_velocity>
+            <min_linear_velocity>-1.0</min_linear_velocity>
+            <max_angular_velocity>2.0</max_angular_velocity>
+            <min_angular_velocity>-2.0</min_angular_velocity>
+        </plugin>
+    </model>
+</sdf>
