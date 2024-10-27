@@ -21,7 +21,6 @@ class MovementController(Node):
         self.create_timer(0.1, self.timer_callback)
 
     def odom_callback(self, msg):
-
         self.current_pos = (msg.pose.pose.position.x, 
                             msg.pose.pose.position.y, 
                             msg.pose.pose.position.z)
@@ -30,26 +29,25 @@ class MovementController(Node):
         self.phi = self.quaternion_to_euler(orientation.x, orientation.y, orientation.z, orientation.w)
         self.get_logger().info(f"Updated odometry: Position: {self.current_pos}, Yaw: {math.degrees(self.phi)} degrees")
 
-    def quaternion_to_euler(self, w, x, y, z):
+    # updated
+    def quaternion_to_euler(self, x, y, z, w):
+        yaw = math.atan2(2 * (w*x + y*x), 1 - 2*(z*z + x*x))
+        return yaw
 
-        roll = math.atan2(2*(w*x + y*z), 1 - 2*(x*x + y*y))
-
-        return roll
-
-
+    # updated
     def calculate_distance(self):
         if self.target_pos is not None:
             delta_x = self.target_pos[0] - self.current_pos[0]
-            delta_z = self.target_pos[2] - self.current_pos[2]
-            return np.sqrt(delta_x**2 + delta_z**2)
+            delta_y = self.target_pos[1] - self.current_pos[1]
+            return np.sqrt(delta_x**2 + delta_y**2)
         return 0
 
-
+    # updated
     def calculate_angle(self):
         if self.target_pos is not None:
             delta_x = self.target_pos[0] - self.current_pos[0]
-            delta_z = self.target_pos[2] - self.current_pos[2]
-            return math.atan2(delta_z, delta_x) - self.phi
+            delta_y = self.target_pos[1] - self.current_pos[1]
+            return math.atan2(delta_x, delta_y)
         return 0
 
     def calculate_linear_velocity(self, distance):
@@ -69,8 +67,10 @@ class MovementController(Node):
         self.publisher.publish(twist_msg)
         self.get_logger().info(f"Published Twist message: Linear vel: {linear_vel}, Angular vel: {angular_vel}")
 
+    # updated
     def tracked_position_callback(self, msg):
-        self.target_pos = (msg.x, 0, msg.z)
+        self.target_pos = ()
+        self.target_pos = (msg.x, msg.y, 0)
         self.get_logger().info(f"New target position set: {self.target_pos}")
 
     def timer_callback(self):
