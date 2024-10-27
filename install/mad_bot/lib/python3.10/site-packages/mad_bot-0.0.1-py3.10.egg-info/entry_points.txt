@@ -1,4 +1,0 @@
-[console_scripts]
-camera_controller = mad_bot.camera_controller:main
-movement_controller = mad_bot.movement_controller:main
-
