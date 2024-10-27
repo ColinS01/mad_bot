@@ -31,8 +31,10 @@ class MovementController(Node):
         self.get_logger().info(f"Updated odometry: Position: {self.current_pos}, Yaw: {math.degrees(self.phi)} degrees")
 
     def quaternion_to_euler(self, w, x, y, z):
-        yaw = math.atan2(2*(w*z + x*y), 1 - 2*(y*y + z*z))
-        return yaw
+
+        roll = math.atan2(2*(w*x + y*z), 1 - 2*(x*x + y*y))
+
+        return roll
 
 
     def calculate_distance(self):
