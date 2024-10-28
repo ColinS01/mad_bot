@@ -108,6 +108,74 @@
             </collision>
         </link>
 
+        <link name='caster_front'>
+            <pose relative_to='chassis'>-0.4 0 -0.275 0 0 0</pose> <!-- Adjusted height to -0.4 -->
+            <inertial>
+                <mass>1</mass>
+                <inertia>
+                    <ixx>0.016</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.016</iyy>
+                    <iyz>0.0</iyz> <!-- Corrected if necessary -->
+                    <izz>0.016</izz>
+                </inertia>
+            </inertial>            
+            <visual name='visual'>
+                <geometry>
+                    <sphere>
+                        <radius>0.075</radius> <!-- Increased radius for more stability -->
+                    </sphere>
+                </geometry>
+                <material>
+                    <ambient>0.0 1 0.0 1</ambient>
+                    <diffuse>0.0 1 0.0 1</diffuse>
+                    <specular>0.0 1 0.0 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                    <sphere>
+                        <radius>0.075</radius>
+                    </sphere>
+                </geometry>
+            </collision>
+        </link>
+        
+        <link name='caster_back'>
+            <pose relative_to='chassis'>0.4 0 -0.275 0 0 0</pose> <!-- Adjusted height to -0.4 -->
+            <inertial>
+                <mass>1</mass>
+                <inertia>
+                    <ixx>0.016</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.016</iyy>
+                    <iyz>0.0</iyz> <!-- Corrected if necessary -->
+                    <izz>0.016</izz>
+                </inertia>
+            </inertial>            
+            <visual name='visual'>
+                <geometry>
+                    <sphere>
+                        <radius>0.075</radius> <!-- Increased radius for more stability -->
+                    </sphere>
+                </geometry>
+                <material>
+                    <ambient>0.0 1 0.0 1</ambient>
+                    <diffuse>0.0 1 0.0 1</diffuse>
+                    <specular>0.0 1 0.0 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                    <sphere>
+                        <radius>0.075</radius>
+                    </sphere>
+                </geometry>
+            </collision>
+        </link>
+
         <joint name='left_wheel_joint' type='revolute'>
             <parent>chassis</parent>
             <child>left_wheel</child>
@@ -132,8 +200,15 @@
                     <effort>10</effort>
                 </limit>
             </axis>
-        </joint>t
-
+        </joint>
+        <joint name='front_caster_joint' type='ball'>
+            <parent>chassis</parent>
+            <child>caster_front</child>
+        </joint>
+        <joint name='back_caster_joint' type='ball'>
+            <parent>chassis</parent>
+            <child>caster_back</child>
+        </joint>
         <plugin
             filename="ignition-gazebo-diff-drive-system"
             name="gz::sim::systems::DiffDrive">
