@@ -139,7 +139,7 @@
             name="gz::sim::systems::DiffDrive">
             <left_joint>left_wheel_joint</left_joint>
             <right_joint>right_wheel_joint</right_joint>
-            <wheel_separation>1.5</wheel_separation>
+            <wheel_separation>0.4</wheel_separation>
             <wheel_radius>0.35</wheel_radius>
             <odom_publish_frequency>5</odom_publish_frequency>
             <max_linear_acceleration>2.0</max_linear_acceleration>

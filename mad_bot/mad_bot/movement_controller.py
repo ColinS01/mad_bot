@@ -31,7 +31,9 @@ class MovementController(Node):
 
     # updated
     def quaternion_to_euler(self, x, y, z, w):
-        yaw = math.atan2(2 * (w*x + y*x), 1 - 2*(z*z + x*x))
+        numerator = 2*((w*z)+(x*y))
+        denom = 1-(2*(np.square(y)+np.square(z)))
+        yaw = np.arctan2(numerator, denom)
         return yaw
 
     # updated
