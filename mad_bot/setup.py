@@ -20,15 +20,17 @@ setup(
                 (os.path.join('share', package_name, 'world'), glob(os.path.join('world', '*.sdf'))),
                 (os.path.join('share', package_name, 'model'), glob(os.path.join('model', '*.sdf'))),
                 (os.path.join('share', package_name, 'model'), glob(os.path.join('model', '*.urdf'))),
+                (os.path.join('share', package_name, 'model', 'april_tag'), glob(os.path.join('model', 'april_tag', '*'))),
                 (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*'))),
-                (os.path.join('share', package_name, 'image'), glob(os.path.join('image', '*.jpg')))
+                (os.path.join('share', package_name, 'image'), glob(os.path.join('image', '*.jpg'))),
+                (os.path.join('share', package_name, 'image'), glob(os.path.join('image', '*.png')))
+
 
 
     ],
     entry_points={
         'console_scripts': [
-            'movement_controller = mad_bot.movement_controller:main',
-            'camera_controller = mad_bot.camera_controller:main',
+            'movement_controller = mad_bot.movement_controller:main'
         ],
     },
 )

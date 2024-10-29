@@ -48,6 +48,19 @@ def generate_launch_description():
                 '-z', '0.1'
             ]
         ),
+        Node(
+            package='ros_gz_sim',
+            executable='create',
+            name='spawn_april_tag',
+            output='screen',
+            arguments=[
+                '-entity', 'april_tag',
+                '-file', os.path.join(pkg_mad_bot, 'model', 'april_tag', 'april_tag.sdf'),
+                '-x', '0', 
+                '-y', '0', 
+                '-z', '0.1'
+            ]
+        ),
 
         # Robot State Publisher
         Node(
@@ -68,14 +81,6 @@ def generate_launch_description():
             name='ros_gz_bridge',
             output='screen',
             parameters=[{'config_file': bridge_file}],
-        ),
-
-        # Additional nodes (e.g., camera, keyboard, movement controller, etc.)
-        Node(
-            package='mad_bot',
-            executable='camera_controller',
-            name='camera_controller',
-            output='screen'
         ),
         Node(
             package='mad_bot',
