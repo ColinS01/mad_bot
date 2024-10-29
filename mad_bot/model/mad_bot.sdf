@@ -175,6 +175,48 @@
                 </geometry>
             </collision>
         </link>
+        <link name="camera_link">
+            <pose relative_to="chassis">.3 0 .2 0 0 0</pose>
+            <inertial>
+              <mass>0.1</mass>
+              <inertia>
+                <ixx>0.000166667</ixx>
+                <iyy>0.000166667</iyy>
+                <izz>0.000166667</izz>
+              </inertia>
+            </inertial>
+            <collision name="collision">
+              <geometry>
+                <box>
+                  <size>0.1 0.1 0.1</size>
+                </box>
+              </geometry>
+            </collision>
+            <visual name="visual">
+              <geometry>
+                <box>
+                  <size>0.1 0.1 0.1</size>
+                </box>
+              </geometry>
+            </visual>
+            <sensor name="camera" type="camera">
+              <camera>
+                <horizontal_fov>1.047</horizontal_fov>
+                <image>
+                  <width>320</width>
+                  <height>240</height>
+                </image>
+                <clip>
+                  <near>0.1</near>
+                  <far>100</far>
+                </clip>
+              </camera>
+              <always_on>1</always_on>
+              <update_rate>30</update_rate>
+              <visualize>true</visualize>
+              <topic>camera</topic>
+            </sensor>
+          </link>
 
         <joint name='left_wheel_joint' type='revolute'>
             <parent>chassis</parent>
@@ -209,6 +251,11 @@
             <parent>chassis</parent>
             <child>caster_back</child>
         </joint>
+        <joint name="camera_joint" type="fixed">
+            <parent>chassis</parent>
+            <child>camera_link</child>
+        </joint>
+        
         <plugin
             filename="ignition-gazebo-diff-drive-system"
             name="gz::sim::systems::DiffDrive">
@@ -225,6 +272,11 @@
             <min_linear_velocity>-1.0</min_linear_velocity>
             <max_angular_velocity>2.0</max_angular_velocity>
             <min_angular_velocity>-2.0</min_angular_velocity>
+        </plugin>
+        <plugin
+            filename="gz-sim-sensors-system"
+            name="gz::sim::systems::Sensors">
+            <render_engine>ogre2</render_engine>
         </plugin>
     </model>
 </sdf>
