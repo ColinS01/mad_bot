@@ -56,9 +56,9 @@ def generate_launch_description():
             arguments=[
                 '-entity', 'april_tag',
                 '-file', os.path.join(pkg_mad_bot, 'model', 'april_tag', 'april_tag.sdf'),
-                '-x', '0', 
+                '-x', '5', 
                 '-y', '0', 
-                '-z', '0.1'
+                '-z', '1'
             ]
         ),
 
@@ -86,6 +86,13 @@ def generate_launch_description():
             package='mad_bot',
             executable='movement_controller',
             name='movement_controller',
+            output='screen',
+            # Removed use_sim_time here
+        ),
+        Node(
+            package='mad_bot',
+            executable='april_tag_controller',
+            name='april_tag_controller',
             output='screen',
             # Removed use_sim_time here
         )
