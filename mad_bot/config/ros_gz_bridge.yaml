@@ -12,3 +12,8 @@
   gz_topic_name: "/clock"
   ros_type_name: "builtin_interfaces/msg/Time"
   gz_type_name: "ignition.msgs.Time"
+
+- ros_topic_name: "/camera/image_raw"
+  gz_topic_name: "/world/mad_world/model/mad_bot/link/camera_link/sensor/camera_sensor/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "ignition.msgs.Image"

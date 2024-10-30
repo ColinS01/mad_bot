@@ -29,7 +29,7 @@ def generate_launch_description():
         
         # Start Ignition Gazebo with a specific world
         ExecuteProcess(
-            cmd=['ign', 'gazebo', world_file],
+            cmd=['ign', 'gazebo', world_file, '--render-engine ogre2'],
             output='screen',
             shell=True,
         ),
@@ -61,18 +61,17 @@ def generate_launch_description():
                 '-z', '1'
             ]
         ),
-
         # Robot State Publisher
-        Node(
-            package='robot_state_publisher',
-            executable='robot_state_publisher',
-            name='robot_state_publisher',
-            output='both',
-            parameters=[
-                {'robot_description': open(os.path.join(pkg_mad_bot, 'model', 'mad_bot.urdf')).read()},
-                # Removed use_sim_time here
-            ]
-        ),
+        #Node(
+        #    package='robot_state_publisher',
+        #    executable='robot_state_publisher',
+        #    name='robot_state_publisher',
+        #    output='both',
+        #    parameters=[
+        #        {'robot_description': open(os.path.join(pkg_mad_bot, 'model', 'mad_bot.urdf')).read()},
+        #        # Removed use_sim_time here
+        #    ]
+        #),
 
         # Launch ROS-GZ Bridge
         Node(
@@ -86,6 +85,13 @@ def generate_launch_description():
             package='mad_bot',
             executable='movement_controller',
             name='movement_controller',
+            output='screen',
+            # Removed use_sim_time here
+        ),
+        Node(
+            package='mad_bot',
+            executable='camera_controller',
+            name='camera_controller',
             output='screen',
             # Removed use_sim_time here
         ),
