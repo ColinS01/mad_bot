@@ -31,7 +31,6 @@ setup(
     entry_points={
         'console_scripts': [
             'movement_controller = mad_bot.movement_controller:main',
-            'april_tag_controller = mad_bot.april_tag_controller:main',
             'camera_controller = mad_bot.camera_controller:main'
         ],
     },

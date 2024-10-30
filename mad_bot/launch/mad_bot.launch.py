@@ -55,8 +55,8 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 '-entity', 'april_tag',
-                '-file', os.path.join(pkg_mad_bot, 'model', 'april_tag', 'april_tag.sdf'),
-                '-x', '5', 
+                '-file', os.path.join(pkg_mad_bot, 'model', 'april_tag', 'april_tag_3.sdf'),
+                '-x', '3', 
                 '-y', '0', 
                 '-z', '1'
             ]
@@ -95,11 +95,4 @@ def generate_launch_description():
             output='screen',
             # Removed use_sim_time here
         ),
-        Node(
-            package='mad_bot',
-            executable='april_tag_controller',
-            name='april_tag_controller',
-            output='screen',
-            # Removed use_sim_time here
-        )
     ])

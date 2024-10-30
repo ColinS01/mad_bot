@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+    <actor name='april_tag'>
+        <skin>
+            <filename>april_tag.dae</filename>
+        </skin>
+        <animation name="waypoint_follow">
+            <translate>0 0 0</translate>
+        </animation>
+        <script>
+            <loop>true</loop>
+            <delay_start>0.0</delay_start>
+            <trajectory id="0" type="linear">
+                <waypoint>
+                    <time>0.0</time>
+                    <pose>0 0 0 0 0 0</pose>
+                </waypoint>
+                <waypoint>
+                    <time>1.0</time>
+                    <pose>2 0 0 0 0 0</pose>
+                </waypoint>
+            </trajectory>
+        </script>
+    </actor>
+</sdf>
