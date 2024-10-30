@@ -2,11 +2,18 @@ import rclpy
 from rclpy.node import Node
 from gazebo_msgs.srv import SetEntityState
 from gazebo_msgs.msg import EntityState
+from geometry_msgs.msg import Vector3
 import tkinter as tk
 
 class AprilTagController(Node):
     def __init__(self):
         super().__init__('april_tag_controller')
+        
+        # topic that will publish april tags position for tracking
+        self.publisher = self.create_publisher(Vector3, "/april_tag_pos", 10)
+        self.timer = self.create_timer(0.5, self.publish_pos)
+        self.current_pos = [0.0, 0.0, 0.0] # dummy pos, to be updated dynamically
+
         self.cli = self.create_client(SetEntityState, '/set_entity_state')
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Service not available, waiting again...')
@@ -27,9 +34,20 @@ class AprilTagController(Node):
         self.master.bind("<KeyPress>", self.move_tag)
         
         self.update_ros()
+    
+    def publish_pos(self):
+        x = self.current_pos[0]
+        y = self.current_pos[1]
+        z = self.current_pos[2]
+        msg = Vector3()
+        msg.x = x
+        msg.y = y
+        msg.z = z
+        self.publisher.publish(msg)
+
 
     def move_tag(self, event):
-        # Move increment value
+        # Move incremental value
         increment = 0.1
         
         if event.char.lower() == "a":  # Move left
