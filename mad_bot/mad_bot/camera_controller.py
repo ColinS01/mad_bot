@@ -17,7 +17,7 @@ class CameraController(Node):
         qos_profile = QoSProfile(depth=10)
         self.obj_height = 0
         self.obj_center = 0
-        self.frame_center = 640 // 2
+        self.frame_center = 1280 // 2
         self.error = None
 
         self.image_stream = self.create_subscription(Image, "/camera/image_raw", self.image_process, qos_profile)
@@ -127,7 +127,7 @@ class CameraController(Node):
         cv.waitKey(1)
 
     def calculate_distance(self):
-        F = 0.5
+        F = 1.0
         H = 200
         d = (F * H) / self.obj_height
         msg = Float32()
