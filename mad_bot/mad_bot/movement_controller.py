@@ -16,11 +16,11 @@ class MovementController(Node):
         
         # Proportional control parameters
         self.kp = 0.007  
-        self.linear_speed = 1.2
+        self.linear_speed = 1.6
         self.smoother = 0.003
         self.bonus_accel = 0.4
         self.max_angular_vel = 1.0  # Cap for angular velocity
-        self.max_linear_vel = 2.0  # Cap for linear velocity
+        self.max_linear_vel = 3.0  # Cap for linear velocity
 
     def move_robot(self, msg):
         error = msg.data
@@ -61,9 +61,9 @@ class MovementController(Node):
     def apply_linear(self, msg):
         distance = msg.data
         if distance > 2:
-            self.linear_speed += 0.8
+            self.linear_speed += 1.8
         else:
-            self.linear_speed = 0.9
+            self.linear_speed = 1.2
 
 
 def main(args=None):
