@@ -9,30 +9,48 @@ class MovementController(Node):
         self.publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.error_sub = self.create_subscription(Int32, '/camera_error', self.move_robot, 10)
         self.distance_sub = self.create_subscription(Float32, '/camera_distance', self.apply_linear, 10)
+        
         self.angular_vel = 0.0
         self.linear_vel = 0.0
+        self.last_error = 0  # Initialize to 0 for the first comparison
         
-        # proportional control
+        # Proportional control parameters
         self.kp = 0.007  
         self.linear_speed = 1.2
         self.smoother = 0.003
         self.bonus_accel = 0.4
+        self.max_angular_vel = 1.0  # Cap for angular velocity
+        self.max_linear_vel = 2.0  # Cap for linear velocity
 
     def move_robot(self, msg):
         error = msg.data
         
+        # Determine if the object is moving left or right
+        if self.last_error is not None:
+            if error > self.last_error:
+                # Object moving away from center (right)
+                self.angular_vel -= self.smoother
+            elif error < self.last_error:
+                # Object moving toward center (left)
+                self.angular_vel += self.smoother
+        
         # Calculate angular velocity using a proportional controller
         self.angular_vel = self.kp * error  
-
+        
         # Check if error is within the range to apply linear velocity
         if -200 < error < 200:
             self.linear_vel = self.linear_speed
-        elif error < -300 or error < 300:
-            self.angular_vel -= self.smoother
-            self.linear_vel += self.bonus_accel
-        else:
+        elif abs(error) > 300:
             self.linear_vel = 0.0  # Stop linear movement if out of range
-            self.angular_vel -= self.smoother
+        else:
+            self.linear_vel += self.bonus_accel
+
+        # Cap the velocities
+        self.angular_vel = max(min(self.angular_vel, self.max_angular_vel), -self.max_angular_vel)
+        self.linear_vel = min(self.linear_vel, self.max_linear_vel)
+
+        # Update last_error for the next iteration
+        self.last_error = error
         
         twist_msg = Twist()
         twist_msg.linear.x = self.linear_vel
@@ -46,7 +64,6 @@ class MovementController(Node):
             self.linear_speed += 0.8
         else:
             self.linear_speed = 0.9
-
 
 
 def main(args=None):

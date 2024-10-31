@@ -85,7 +85,7 @@ class CameraController(Node):
         self.image = cv_image
         self.gray = cv.cvtColor(self.image, cv.COLOR_BGR2GRAY)
         self.gray = cv.GaussianBlur(self.gray, (5, 5), 0)
-        self.options = apriltag.DetectorOptions(families="tag36h11")
+        self.options = apriltag.DetectorOptions(families="tag36h11", nthreads=4, refine_edges=True)
         self.detector = apriltag.Detector(self.options)
         self.results = self.detector.detect(self.gray)
 
