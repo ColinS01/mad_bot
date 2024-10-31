@@ -7,6 +7,7 @@ from launch.substitutions import PathJoinSubstitution, LaunchConfiguration, Text
 from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import ExecuteProcess
+import random
 
 def generate_launch_description():
     pkg_mad_bot = get_package_share_directory('mad_bot')
@@ -15,6 +16,13 @@ def generate_launch_description():
     model_path = PathJoinSubstitution([pkg_mad_bot, 'model'])
     world_file = os.path.join(pkg_mad_bot, 'world', 'world.sdf')
     bridge_file = os.path.join(pkg_mad_bot, 'config', 'ros_gz_bridge.yaml')
+
+    paths = [
+        'april_tag_1.sdf',
+        'april_tag_2.sdf',
+        'april_tag_3.sdf'
+    ]
+    selected_path = random.choice(paths)
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -55,7 +63,7 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 '-entity', 'april_tag',
-                '-file', os.path.join(pkg_mad_bot, 'model', 'april_tag', 'april_tag_3.sdf'),
+                '-file', os.path.join(pkg_mad_bot, 'model', 'april_tag', selected_path),
                 '-x', '2', 
                 '-y', '0', 
                 '-z', '1'
