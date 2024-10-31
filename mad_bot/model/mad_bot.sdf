@@ -195,7 +195,7 @@
                 <update_rate>60</update_rate>
                 <visualize>true</visualize>
                 <camera name="head">
-                    <horizontal_fov>1</horizontal_fov>
+                    <horizontal_fov>1.5708</horizontal_fov>
                     <image>
                         <width>640</width>
                         <height>480</height>
@@ -205,12 +205,6 @@
                         <near>0.02</near>
                         <far>50</far>
                     </clip>
-                    <lens>
-                        <intrinsics>
-                            <fx>277</fx>
-                            <fy>277</fy>
-                        </intrinsics>
-                    </lens>
                 </camera>
                 <plugin
                     filename="ignition-gazebo-sensors-system"
