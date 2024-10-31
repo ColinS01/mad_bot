@@ -1,11 +1,15 @@
+import os
+from ament_index_python import get_package_share_directory
 from rclpy.node import Node
 import rclpy
 from rclpy.qos import QoSProfile
 from sensor_msgs.msg import Image
-from std_msgs.msg import Int32
+from std_msgs.msg import Int32, Float32
 import cv2 as cv
 from cv_bridge import CvBridge, CvBridgeError
 import apriltag
+import numpy as np
+import glob
 
 class CameraController(Node):
     def __init__(self):
@@ -15,8 +19,58 @@ class CameraController(Node):
         self.obj_center = 0
         self.frame_center = 640 // 2
         self.error = None
+
         self.image_stream = self.create_subscription(Image, "/camera/image_raw", self.image_process, qos_profile)
-        self.publisher = self.create_publisher(Int32, "/camera_error", qos_profile)
+        self.offset_publisher = self.create_publisher(Int32, "/camera_error", qos_profile)
+        self.distance_publisher = self.create_publisher(Float32, "/camera_distance", qos_profile)
+
+        # Start calibration
+        self.calibrate_camera()
+
+    def calibrate_camera(self):
+        chessboard_size = (7, 6)  # Number of inner corners in the chessboard
+        square_size = 0.025  # Size of squares in meters
+
+        objp = np.zeros((chessboard_size[0] * chessboard_size[1], 3), np.float32)
+        objp[:, :2] = np.mgrid[0:chessboard_size[0], 0:chessboard_size[1]].T.reshape(-1, 2) * square_size
+
+        objpoints = []  # 3D points in real world space
+        imgpoints = []  # 2D points in image plane
+
+        # Capture images for calibration
+        images = glob.glob(os.path.join(get_package_share_directory('mad_bot'), 'images', '*.jpg'))
+
+        for fname in images:
+            img = cv.imread(fname)
+            gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+
+            # Find the chessboard corners
+            ret, corners = cv.findChessboardCorners(gray, chessboard_size, None)
+
+            # If found, add object points, image points (after refining them)
+            if ret:
+                objpoints.append(objp)
+                corners2 = cv.cornerSubPix(gray, corners, (11, 11), (-1, -1), (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001))
+                imgpoints.append(corners2)
+
+                # Draw and display the corners
+                cv.drawChessboardCorners(img, chessboard_size, corners2, ret)
+                cv.imshow('Calibration Image', img)
+                cv.waitKey(500)  # Display for a short time
+
+        cv.destroyAllWindows()
+
+        # Perform calibration
+        if len(objpoints) > 0 and len(imgpoints) > 0:
+            ret, mtx, dist, _, _ = cv.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+
+            if ret:
+                np.savez('calibration_data.npz', mtx=mtx, dist=dist)
+                self.get_logger().info("Camera calibrated successfully!")
+            else:
+                self.get_logger().error("Camera calibration failed.")
+        else:
+            self.get_logger().error("Not enough images for calibration.")
 
     def image_process(self, msg):
         bridge = CvBridge()
@@ -56,11 +110,11 @@ class CameraController(Node):
             # Calculate height in pixels
             self.obj_height = ptD[1] - ptA[1]
 
-            # find center of object for offset
+            # Find center of object for offset
             self.obj_center = ((ptC[0] - ptD[0]) / 2) + ptD[0]
             self.get_logger().info(str(self.obj_height))
 
-            # if the height is existing then an object is detected
+            # If the height is existing then an object is detected
             if self.obj_height > 0:
                 distance = self.calculate_distance()
                 self.calculate_offset()
@@ -76,6 +130,9 @@ class CameraController(Node):
         F = 0.5
         H = 200
         d = (F * H) / self.obj_height
+        msg = Float32()
+        msg.data = d
+        self.distance_publisher.publish(msg)
         return d
 
     def calculate_offset(self):
@@ -83,7 +140,7 @@ class CameraController(Node):
         msg = Int32()
         msg.data = int(self.error)
         self.get_logger().info(f'Error: {self.error}')
-        self.publisher.publish(msg)
+        self.offset_publisher.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)
