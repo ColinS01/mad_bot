@@ -17,7 +17,15 @@
                 </waypoint>
                 <waypoint>
                     <time>1.0</time>
-                    <pose>2 0 0 0 0 0</pose>
+                    <pose>2 1 0 0 0 0</pose>
+                </waypoint>
+                <waypoint>
+                    <time>3.0</time>
+                    <pose>2 -1 0 0 0 0</pose>
+                </waypoint>
+                <waypoint>
+                    <time>4.0</time>
+                    <pose>0 0 0 0 0 0</pose>
                 </waypoint>
             </trajectory>
         </script>

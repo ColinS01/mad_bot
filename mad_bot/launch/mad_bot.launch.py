@@ -56,7 +56,7 @@ def generate_launch_description():
             arguments=[
                 '-entity', 'april_tag',
                 '-file', os.path.join(pkg_mad_bot, 'model', 'april_tag', 'april_tag_3.sdf'),
-                '-x', '3', 
+                '-x', '2', 
                 '-y', '0', 
                 '-z', '1'
             ]
