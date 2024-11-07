@@ -4,7 +4,7 @@ from rclpy.node import Node
 import rclpy
 from rclpy.qos import QoSProfile
 from sensor_msgs.msg import Image
-from std_msgs.msg import Int32, Float32
+from std_msgs.msg import Int32, Float32, Bool
 import cv2 as cv
 from cv_bridge import CvBridge, CvBridgeError
 import apriltag
@@ -23,6 +23,7 @@ class CameraController(Node):
         self.image_stream = self.create_subscription(Image, "/camera/image_raw", self.image_process, qos_profile)
         self.offset_publisher = self.create_publisher(Int32, "/camera_error", qos_profile)
         self.distance_publisher = self.create_publisher(Float32, "/camera_distance", qos_profile)
+        self.detect_publisher = self.create_publisher(Bool, '/camera_detection', 10)
 
         # Start calibration
         self.calibrate_camera()
@@ -38,7 +39,7 @@ class CameraController(Node):
         imgpoints = []  # 2D points in image plane
 
         # Capture images for calibration
-        images = glob.glob(os.path.join(get_package_share_directory('mad_bot'), 'images', '*.jpg'))
+        images = glob.glob(os.path.join(get_package_share_directory('mad_bot'), 'image', '*.jpg'))
 
         for fname in images:
             img = cv.imread(fname)
@@ -74,6 +75,7 @@ class CameraController(Node):
 
     def image_process(self, msg):
         bridge = CvBridge()
+        self.obj_height = 0
 
         # Try converting the image message to cv2 format
         try:
@@ -112,7 +114,6 @@ class CameraController(Node):
 
             # Find center of object for offset
             self.obj_center = ((ptC[0] - ptD[0]) / 2) + ptD[0]
-            self.get_logger().info(str(self.obj_height))
 
             # If the height is existing then an object is detected
             if self.obj_height > 0:
@@ -120,6 +121,12 @@ class CameraController(Node):
                 self.calculate_offset()
                 cv.putText(self.image, str(distance), (ptA[0], ptA[1] - 15),
                         cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                
+        if self.obj_height == 0:
+            detect_msg = Bool()
+            detect_msg.data = False
+            self.detect_publisher.publish(detect_msg)
+
 
         # Show the output image after AprilTag detection
         resized_image = cv.resize(self.image, (640, 480))
@@ -139,7 +146,6 @@ class CameraController(Node):
         self.error = float(self.frame_center - self.obj_center)
         msg = Int32()
         msg.data = int(self.error)
-        self.get_logger().info(f'Error: {self.error}')
         self.offset_publisher.publish(msg)
 
 def main(args=None):

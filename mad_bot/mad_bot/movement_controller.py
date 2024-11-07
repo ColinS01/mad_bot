@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
-from std_msgs.msg import Int32, Float32
+from std_msgs.msg import Int32, Float32, Bool
 
 class MovementController(Node):
     def __init__(self):
@@ -9,21 +9,23 @@ class MovementController(Node):
         self.publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.error_sub = self.create_subscription(Int32, '/camera_error', self.move_robot, 10)
         self.distance_sub = self.create_subscription(Float32, '/camera_distance', self.apply_linear, 10)
+        self.detect_sub = self.create_subscription(Bool, '/camera_detection', self.fallback, 10)
         
         self.angular_vel = 0.0
         self.linear_vel = 0.0
         self.last_error = 0  # Initialize to 0 for the first comparison
         
         # Proportional control parameters
-        self.kp = 0.007  
-        self.linear_speed = 1.6
+        self.kp = 0.02  
+        self.linear_speed = 6.0
         self.smoother = 0.003
         self.bonus_accel = 0.4
         self.max_angular_vel = 1.0  # Cap for angular velocity
-        self.max_linear_vel = 3.0  # Cap for linear velocity
+        self.max_linear_vel = 20.0 # Cap for linear velocity
 
     def move_robot(self, msg):
         error = msg.data
+
         
         # Determine if the object is moving left or right
         if self.last_error is not None:
@@ -64,6 +66,22 @@ class MovementController(Node):
             self.linear_speed += 1.8
         else:
             self.linear_speed = 1.2
+    
+    def fallback(self, msg):
+        # if object is lost, turn until found
+        self.get_logger().info("camera lost april tag")
+        if msg.data == False:
+            self.linear_vel = 0.0 # thow it in reverse for sharper turn
+            self.angular_vel = self.kp * (self.last_error * 20)# turn the direction the object went off screen
+            self.get_logger().info("angular velocity: " + str(self.angular_vel))
+
+            twist_msg = Twist()
+            twist_msg.linear.x = self.linear_vel
+            twist_msg.angular.z = self.angular_vel
+            
+            self.get_logger().info(f"April Tag lost, turning till found")
+            self.publisher.publish(twist_msg)
+
 
 
 def main(args=None):
